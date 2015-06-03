@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>vis.js - A dynamic, browser based visualization library.</title>
+    <title>vis.js - Network documentation.</title>
 
     <!-- Bootstrap core CSS -->
     <link href="../css/bootstrap.css" rel="stylesheet">
@@ -88,9 +88,6 @@
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li><a href="http://www.visjs.org/index.html#modules">Modules</a></li>
-                        <li class="active"><a href="./docs/index.html" target="_blank">Documentation <img class="icon"
-                                                                                                          src="../img/external-link-icons/external-link-icon-white.png"></a>
-                        </li>
                         <li><a href="http://www.visjs.org/blog.html">Blog</a></li>
                         <li><a href="http://www.visjs.org/index.html#download_install">Download</a></li>
                         <li><a href="http://www.visjs.org/showcase/index.html">Showcase</a></li>
@@ -190,7 +187,7 @@
 &lt;/body&gt;
 &lt;/html&gt;
 </pre>
-    <p><a href="http://visjs.org/examples/network/basic_usage.html" target="_blank">The result of the code above will be the basic example which is shown here.</a></p>
+    <p><a href="http://visjs.org/examples/network/basicUsage.html" target="_blank">The result of the code above will be the basic example which is shown here.</a></p>
 
     <br>
     </div>
@@ -250,10 +247,7 @@
             targetNode="eventsDiv"><a>Events</a></li>
         <li role="presentation"
             onclick="toggleTab(this);"
-            targetNode="dotParserDiv"><a>DOT language</a></li>
-        <li role="presentation"
-            onclick="toggleTab(this);"
-            targetNode="gephiDiv"><a>Importing from Gephi</a></li>
+            targetNode="importDiv"><a>Import</a></li>
     </ul>
     <br>
 
@@ -625,14 +619,37 @@ var locales = {
                 <td class="midMethods">Returns: Boolean</td>
                 <td>Returns true if the node whose ID has been supplied is a cluster.</td>
             </tr>
+            <tr class="collapsible toggle" onclick="toggleTable('methodTable','getNodesInCluster', this);">
+                <td colspan="2"><span parent="getNodesInCluster" class="right-caret"></span> getNodesInCluster(
+                    <code>String clusterNodeId</code>)
+            </tr>
+            <tr class="hidden" parent="getNodesInCluster">
+                <td class="midMethods">Returns: Array</td>
+                <td>Returns an array of all nodeIds of the nodes that would be released if you open the cluster.
+                </td>
+            </tr>
             <tr class="collapsible toggle" onclick="toggleTable('methodTable','openCluster', this);">
                 <td colspan="2"><span parent="openCluster" class="right-caret"></span> openCluster(
-                    <code>String nodeId</code>)
+                    <code>String nodeId, Object options</code>)
             </tr>
             <tr class="hidden" parent="openCluster">
                 <td class="midMethods">Returns: none</td>
                 <td>Opens the cluster, releases the contained nodes and edges, removing the cluster node and cluster
-                    edges.
+                    edges. The options object is optional and currently supports one option, releaseFunction, which is a function that can be used to manually
+                    position the nodes after the cluster is opened. <br>
+<pre class="code">
+function releaseFunction (clusterPosition, containedNodesPositions) {
+    var newPositions = {};
+    // clusterPosition = {x:clusterX, y:clusterY};
+    // containedNodesPositions = {nodeId:{x:nodeX,y:nodeY}, nodeId2....}
+    newPositions[nodeId] = {x:newPosX, y:newPosY};
+    return newPositions;
+}</pre>
+                    The containedNodesPositions contain the positions of the nodes in the cluster at the moment they were clustered.
+                    This function is expected to return the newPositions, which can be the containedNodesPositions (altered) or a new object. This has to be an object with keys equal
+                    to the nodeIds that exist in the containedNodesPositions and an <code>{x:x,y:y}</code> position object. <br><br>
+
+                    For all nodeIds not listed in this returned object, we will position them at the location of the cluster. This is also the default behaviour when no releaseFunction is defined.
                 </td>
             </tr>
 
@@ -684,12 +701,12 @@ var locales = {
                     <code>enabled</code> to false.
                 </td>
             </tr>
-            <tr class="collapsible toggle" onclick="toggleTable('methodTable','editNodeMode', this);">
-                <td colspan="2"><span parent="editNodeMode" class="right-caret"></span> editNodeMode()</td>
+            <tr class="collapsible toggle" onclick="toggleTable('methodTable','editNode', this);">
+                <td colspan="2"><span parent="editNode" class="right-caret"></span> editNode()</td>
             </tr>
-            <tr class="hidden" parent="editNodeMode">
+            <tr class="hidden" parent="editNode">
                 <td class="midMethods">Returns: none</td>
-                <td>Go into editNode mode. The explaination from <code>addNodeMode</code> applies here as well.</td>
+                <td>Edit the selected node. The explaination from <code>addNodeMode</code> applies here as well.</td>
             </tr>
             <tr class="collapsible toggle" onclick="toggleTable('methodTable','addEdgeMode', this);">
                 <td colspan="2"><span parent="addEdgeMode" class="right-caret"></span> addEdgeMode()</td>
@@ -888,7 +905,7 @@ var locales = {
                 </td>
             </tr>
             <tr class="hidden" parent="getEdgeAt">
-                <td class="midMethods">Returns: String</code></td>
+                <td class="midMethods">Returns: String</td>
                 <td>Returns a edgeId or undefined. The DOM positions are expected to be in pixels from the top left
                     corner
                     of the canvas..
@@ -1029,7 +1046,7 @@ var locales = {
                     <code>linear, easeInQuad, easeOutQuad, easeInOutQuad, easeInCubic, easeOutCubic, easeInOutCubic,
                         easeInQuart, easeOutQuart, easeInOutQuart, easeInQuint, easeOutQuint, easeInOutQuint</code>.
 
-                    <i>You will have to define at least a scale or a position. Otherwise, there is nothing to move
+                    <i>You will have to define at least a scale, position or offset. Otherwise, there is nothing to move
                         to.</i>
                 </td>
             </tr>
@@ -1150,7 +1167,7 @@ var options = {
 
         </table>
     </div>
-    <div id="eventsDiv" class=" hidden">
+    <div id="eventsDiv" class="hidden">
         <h3>All Events</h3>
 
         <p>This is a list of all the events in the public API. They are collected here from all individual modules.</p>
@@ -1165,11 +1182,14 @@ var options = {
             <tr class="subHeader">
                 <td colspan="3">Events triggered by human interaction, selection, dragging etc.</td>
             </tr>
-            <tr class="">
+            <tr>
                 <td>click</td>
                 <td>
-<pre class="code">
-{
+                    Object
+                </td>
+                <td>Fired when the user clicks the mouse or taps on a touchscreen device. Passes an object with properties structured as:
+
+                <pre class="prettyprint lang-js">{
   nodes: [Array of selected nodeIds],
   edges: [Array of selected edgeIds],
   event: [Object] original click event,
@@ -1180,9 +1200,8 @@ var options = {
 }
 </pre>
                 </td>
-                <td>Fired when the user clicks the mouse or taps on a touchscreen device.</td>
             </tr>
-            <tr class="">
+            <tr>
                 <td>doubleClick</td>
                 <td>same as <code>click</code>.</td>
                 <td>Fired when the user double clicks the mouse or double taps on a touchscreen device. Since a double
@@ -1194,15 +1213,15 @@ var options = {
                     processing them.
                 </td>
             </tr>
-            <tr class="">
+            <tr>
                 <td>oncontext</td>
                 <td>same as <code>click</code>.</td>
                 <td>Fired when the user click on the canvas with the right mouse button. The right mouse button does not
-                    select by default. You can use <a href="./selection.html">getNodeAt</a> to select the node if you
+                    select by default. You can use the method <code>getNodeAt</code> to select the node if you
                     want.
                 </td>
             </tr>
-            <tr class="">
+            <tr>
                 <td>hold</td>
                 <td>same as <code>click</code>.</td>
                 <td>Fired when the user clicks and holds the mouse or taps and holds on a touchscreen device. A click
@@ -1210,13 +1229,13 @@ var options = {
                     is also fired in this case.
                 </td>
             </tr>
-            <tr class="">
+            <tr>
                 <td>release</td>
                 <td>same as <code>click</code>.</td>
                 <td>Fired after drawing on the canvas has been completed. Can be used to draw on top of the network.
                 </td>
             </tr>
-            <tr class="">
+            <tr>
                 <td>select</td>
                 <td>same as <code>click</code>.</td>
                 <td>Fired when the selection has changed by user action. This means a node or edge has been selected,
@@ -1224,20 +1243,22 @@ var options = {
                     to the selection or deselected. <b>All select events are only triggered on click and hold</b>.
                 </td>
             </tr>
-            <tr class="">
+            <tr>
                 <td>selectNode</td>
                 <td>same as <code>click</code>.</td>
                 <td>Fired when a node has been selected by the user.</td>
             </tr>
-            <tr class="">
+            <tr>
                 <td>selectEdge</td>
                 <td>same as <code>click</code>.</td>
                 <td>Fired when a edge has been selected by the user.</td>
             </tr>
-            <tr class="">
+            <tr>
                 <td>deselectNode</td>
-                <td><pre class="code">
-{
+                <td>Object
+                </td>
+                <td>Fired when a node (or nodes) has (or have) been deselected by the user. The previous selection is the list of nodes and edges that were selected before the last user event. Passes an object with properties structured as:
+<pre class="prettyprint lang-js">{
   nodes: [Array of selected nodeIds],
   edges: [Array of selected edgeIds],
   event: [Object] original click event,
@@ -1253,12 +1274,8 @@ var options = {
 }
 </pre>
                 </td>
-                <td>Fired when a node (or nodes) has (or have) been deselected by the user. The previous selection is
-                    the
-                    list of nodes and edges that were selected before the last user event.
-                </td>
             </tr>
-            <tr class="">
+            <tr>
                 <td>deselectEdge</td>
                 <td>same as <code>deselectNode</code>.</td>
                 <td>Fired when a edge (or edges) has (or have) been deselected by the user. The previous selection is
@@ -1266,32 +1283,42 @@ var options = {
                     list of nodes and edges that were selected before the last user event.
                 </td>
             </tr>
-            <tr class="">
+            <tr>
                 <td>dragStart</td>
                 <td>same as <code>click</code>.</td>
                 <td>Fired when starting a drag.</td>
             </tr>
-            <tr class="">
+            <tr>
                 <td>dragging</td>
                 <td>same as <code>click</code>.</td>
                 <td>Fired when dragging node(s) or the view.</td>
             </tr>
-            <tr class="">
+            <tr>
                 <td>dragEnd</td>
                 <td>same as <code>click</code>.</td>
                 <td>Fired when the drag has finished.</td>
             </tr>
-            <tr class="">
+            <tr>
+                <td>hoverNode</td>
+                <td><code>{node: nodeId}</code></td>
+                <td>Fired interaction:{hover:true} and the mouse hovers over a node.</td>
+            </tr>
+            <tr>
+                <td>blurNode</td>
+                <td><code>{node: nodeId}</code></td>
+                <td>Fired interaction:{hover:true} and the mouse moved away from a node it was hovering over before.</td>
+            </tr>
+            <tr>
                 <td>zoom</td>
                 <td><code>{direction:'+'/'-', scale: Number}</code></td>
                 <td>Fired when the user zooms in or out. The properties tell you which direction the zoom is in. The scale is a number greater than 0, which is the same that you get with network.getScale().</td>
             </tr>
-            <tr class="">
+            <tr>
                 <td>showPopup</td>
                 <td><code>id of item corresponding to popup</code></td>
                 <td>Fired when the popup (tooltip) is shown.</td>
             </tr>
-            <tr class="">
+            <tr>
                 <td>hidePopup</td>
                 <td>none</td>
                 <td>Fired when the popup (tooltip) is hidden.</td>
@@ -1299,55 +1326,47 @@ var options = {
             <tr class="subHeader ">
                 <td colspan="3">Events triggered the physics simulation. Can be used to trigger GUI updates.</td>
             </tr>
-            <tr class="">
+            <tr>
                 <td>startStabilizing</td>
                 <td>none</td>
                 <td>Fired when stabilization starts. This is also the case when you drag a node and the physics
                     simulation
                     restarts to stabilize again. Stabilization does not neccesarily imply 'without showing'.
                 </td>
-            <tr class="">
+            <tr>
                 <td>stabilizationProgress</td>
-                <td>
-<pre class="code">
-{
+                <td>Object</td>
+                <td>Fired when a multiple of the <code>updateInterval</code> number of iterations is reached. This only occurs in the 'hidden' stabilization. Passes an object with properties structured as:
+
+                    <pre class="prettyprint lang-js">{
   iterations: Number // iterations so far,
   total: Number      // total iterations in options
-}
-</pre>
-                </td>
-                <td>Fired when a multiple of the <code>updateInterval</code> number of iterations is reached. This only
-                    occurs in the 'hidden' stabilization.
+}</pre>
                 </td>
             </tr>
-            <tr class="">
+            <tr>
                 <td>stabilizationIterationsDone</td>
                 <td>none</td>
-                <td>Fired when the 'hidden' stabilization finishes. This does not necessarily mean the network is
-                    stabilized; it could also mean that the amount of iterations defined in the options has been
-                    reached.
+                <td>Fired when the 'hidden' stabilization finishes. This does not necessarily mean the network is stabilized; it could also mean that the amount of iterations defined in the options has been reached.
                 </td>
-            <tr class="">
+            <tr>
                 <td>stabilized</td>
-                <td>
-<pre class="code">
-{
+                <td>Object</td>
+                <td>Fired when the network has stabilized or when the <code>stopSimulation()</code> has been called. The amount of iterations it took could be used to tweak the maximum amount of iterations needed to stabilize the network. Passes an object with properties structured as:
+<pre class="prettyprint lang-js">{
   iterations: Number // iterations it took
-}
-</pre>
-                </td>
-                <td>Fired when the network has stabilized or when the <code>stopSimulation()</code> has been called. The
-                    amount of iterations it took could be used to tweak the maximum amount of iterations needed to
-                    stabilize
-                    the network.
+}</pre>
+
                 </td>
             <tr class="subHeader">
                 <td colspan="3">Event triggered by the canvas.</td>
             </tr>
-            <tr class="">
+            <tr>
                 <td>resize</td>
-                <td>
-<pre class="code">
+                <td>Object</td>
+                <td>Fired when the size of the canvas has been resized, either by a redraw call when the container div has changed in size, a setSize() call with new values or a setOptions() with new width and/or height values. Passes an object with properties structured as:
+
+<pre class="prettyprint lang-js">
 {
   width: Number     // the new width  of the canvas
   height: Number    // the new height of the canvas
@@ -1355,13 +1374,6 @@ var options = {
   oldHeight: Number // the old height of the canvas
 }
 </pre>
-                    <ul>
-                    </ul>
-                </td>
-                <td>Fired when the size of the canvas has been resized, either by a redraw call when the container div
-                    has
-                    changed in size, a setSize() call with new values or a setOptions() with new width and/or height
-                    values.
                 </td>
 
             </tr>
@@ -1370,21 +1382,21 @@ var options = {
                     canvas.
                 </td>
             </tr>
-            <tr class="">
+            <tr>
                 <td>initRedraw</td>
                 <td>none</td>
                 <td>Fired before the redrawing begins. The simulation step has completed at this point. Can be used to
                     move
                     custom elements before starting drawing the new frame.
                 </td>
-            <tr class="">
+            <tr>
                 <td>beforeDrawing</td>
                 <td><code>canvas context</code></td>
                 <td>Fired after the canvas has been cleared, scaled and translated to the viewing position but before
                     all
                     edges and nodes are drawn. Can be used to draw behind the network.
                 </td>
-            <tr class="">
+            <tr>
                 <td>afterDrawing</td>
                 <td><code>canvas context</code></td>
                 <td>Fired after drawing on the canvas has been completed. Can be used to draw on top of the network.
@@ -1393,49 +1405,20 @@ var options = {
             <tr class="subHeader">
                 <td colspan="3">Event triggered by the view module.</td>
             </tr>
-            <tr class="">
+            <tr>
                 <td>animationFinished</td>
                 <td>none</td>
                 <td>Fired when an animation is finished.</td>
         </table>
 
     </div>
-    <div id="dotParserDiv" class=" hidden">
-        <p>
-            Network supports data in the
-            <a href="http://en.wikipedia.org/wiki/DOT_language" target="_blank">DOT language</a>.
-            To use data in the DOT language, you can use the vis.network.convertDot converter to transform the DOT
-            language
-            into a vis.Network compatible nodes, edges and options objects. You can extend the options object with other
-            options if you'd like.
-        </p>
 
-        <p>
-            Example usage:
-        </p>
+    <div id="importDiv" class=" hidden">
 
-<pre class="prettyprint lang-js">
-// provide data in the DOT language
-var DOTstring = 'dinetwork {1 -> 1 -> 2; 2 -> 3; 2 -- 4; 2 -> 1 }';
-var parsedData = vis.network.convertDot(DOTstring);
+        <p>Network contains conversion utilities to import data from <a href="#importGephi">Gephi</a> and graphs in the <a href="#importDot">DOT language</a>.</p>
 
-var data = {
-  nodes: parsedData.nodes,
-  edges: parsedData.edges
-}
+        <h3 id="importGephi">Import data from Gephi</h3>
 
-var options = parsedData.options;
-
-// you can extend the options like a normal JSON variable:
-options.nodes = {
-  color: 'red'
-}
-
-// create a network
-var network = new vis.Network(container, data, options);
-</pre>
-    </div>
-    <div id="gephiDiv" class=" hidden">
         <p>
             Network can import data straight from an exported json file from gephi. You can get the JSON exporter here:
             <a href="https://marketplace.gephi.org/plugin/json-exporter/" target="_blank">https://marketplace.gephi.org/plugin/json-exporter/</a>.
@@ -1448,7 +1431,7 @@ var network = new vis.Network(container, data, options);
 
 <pre class="prettyprint lang-js">
 // load the JSON file containing the Gephi network.
-var gephiJSON = loadJSON("./datasources/WorldCup2014.json"); // code in <a href="../examples/network/data/importing_from_gephi.html">importing_from_gephi</a>.
+var gephiJSON = loadJSON("./datasources/WorldCup2014.json"); // code in <a href="http://visjs.org/examples/network/data/importingFromGephi.html">importing_from_gephi</a>.
 
 // you can customize the result like with these options. These are explained below.
 // These are the default options.
@@ -1514,7 +1497,44 @@ var network = new vis.Network(container, data);
             </tr>
 
         </table>
+
+        <h3 id="importDot">Import data in DOT language</h3>
+
+        <p>
+            Network supports data in the
+            <a href="http://en.wikipedia.org/wiki/DOT_language" target="_blank">DOT language</a>.
+            To use data in the DOT language, you can use the vis.network.convertDot converter to transform the DOT
+            language
+            into a vis.Network compatible nodes, edges and options objects. You can extend the options object with other
+            options if you'd like.
+        </p>
+
+        <p>
+            Example usage:
+        </p>
+
+<pre class="prettyprint lang-js">
+// provide data in the DOT language
+var DOTstring = 'dinetwork {1 -> 1 -> 2; 2 -> 3; 2 -- 4; 2 -> 1 }';
+var parsedData = vis.network.convertDot(DOTstring);
+
+var data = {
+  nodes: parsedData.nodes,
+  edges: parsedData.edges
+}
+
+var options = parsedData.options;
+
+// you can extend the options like a normal JSON variable:
+options.nodes = {
+  color: 'red'
+}
+
+// create a network
+var network = new vis.Network(container, data, options);
+</pre>
     </div>
+
 
 </div>
 

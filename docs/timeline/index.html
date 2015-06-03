@@ -51,9 +51,6 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li><a href="http://www.visjs.org/index.html#modules">Modules</a></li>
-            <li class="active"><a href="./docs/index.html" target="_blank">Documentation <img class="icon"
-                                                                                              src="../img/external-link-icons/external-link-icon-white.png"></a>
-            </li>
             <li><a href="http://www.visjs.org/blog.html">Blog</a></li>
             <li><a href="http://www.visjs.org/index.html#download_install">Download</a></li>
             <li><a href="http://www.visjs.org/showcase/index.html">Showcase</a></li>
@@ -761,7 +758,7 @@ function (option, path) {
       <td><span parent="orientation" class="right-caret"></span> orientation</td>
       <td>String or Object</td>
       <td><code>'bottom'</code></td>
-      <td>Orientation of the timelines axis and items. When orientation is a string, the value is applied to both items and axis. Can be 'top', 'bottom' (default), or 'both'.</td>
+      <td>Orientation of the timelines axis and items. When orientation is a string, the value is applied to both items and axis. Can be 'top', 'bottom' (default), 'both', or 'none'.</td>
     </tr>
     <tr parent="orientation" class="hidden">
       <td class="indent">orientation.axis</td>
@@ -938,8 +935,9 @@ function (option, path) {
       <td>
         Add new vertical bar representing a custom time that can be dragged by the user.
         Parameter <code>time</code> can be a Date, Number, or String, and is <code>new Date()</code> by default.
-        Parameter <code>id</code> can be Number or String and is <code>undefined</code> by default.<br>
-        Returns id of the created bar.
+        Parameter <code>id</code> can be Number or String and is <code>undefined</code> by default.
+        The <code>id</code>code> is added as CSS class name of the custom time bar, allowing to style multiple time bars differently.
+        The method returns id of the created bar.
       </td>
     </tr>
 
@@ -1003,6 +1001,12 @@ function (option, path) {
           <li><code>what</code> (String or null): name of the clicked thing: <code>item</code>, <code>background</code>, <code>axis</code>, <code>group-label</code>, <code>custom-time</code>, or <code>current-time</code>.</li>
           <li><code>event</code> (Object): the original click event.</li>
         </ul>
+        Example usage:
+        <pre class="prettyprint lang-js">
+document.getElementById('myTimeline').onclick = function (event) {
+  var props = timeline.getEventProperties(event)
+  console.log(props);
+}</pre>
       </td>
     </tr>
 

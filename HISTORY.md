@@ -1,6 +1,66 @@
 # vis.js history
 http://visjs.org
 
+## not-yet-released, version 4.1.1-SNAPSHOT
+
+### General
+
+- Fixed #893, #911: the `clickToUse` option of Network, Graph2d, and Network 
+  was blocking click events in the web page.
+
+### Timeline
+
+- Added axis orientation option `'none'`.
+- Improved function `fit()` to take into account the actual width of items.
+- Fixed #897: Timeline option `{snap: null}` did give a validation error.
+
+### Graph2D
+
+- Fixed #892, addressed any case in validator.
+- Fixed #898, lines are not taken into account for stacking.
+
+### Network
+
+- Improved robustness against people molesting the Function.prototype.bind()
+- Fixed few functions including storePositions().
+- Added beginnings of unit testing for network.
+- Fixed #904, correctly parsing global font options now.
+- Fixed dataView support for storePositions.
+- Second click on node is no longer unselect.
+- Added releaseFunction to openCluster.
+- Fixed bug where the network could flicker when the pixelRatio is not integer.
+
+
+## 2015-05-28, version 4.1.0
+
+### Network
+
+- Fixed #866, manipulation can now be set to false without crashing.
+- Fixed #860, edit node mode now works as it should.
+- Fixed #859, images now resize again when they are loaded.
+- Fixed dynamic edges not correctly handling non-existent nodes.
+- Accepted pull from @killerDJO for fixing selected and hover colors for edges.
+- Fixed bug with right mouse button, scroll center and popup positions using the wrong coordinates.
+- Fixed click to use.
+- Fixed getConnectedEdges method.
+- Fixed clustering bug.
+- Added getNodesInCluster method.
+- Renamed editNodeMode to editNode, editNodeMode now give a deprecation log message.
+- Added multiselect to the docs.
+- Removed deprecated dynamic entree, allow any smooth curve style for hierarchical layout.
+- Fixed bug with the moveTo and getViewPosition methods.
+- Fixed #861, brokenImage only working for one node if nodes have the same image.
+- Fixed hoverNode and blurNode events and added them to the docs.
+- Fixed #884, selectNode event.
+- Fixed dynamic setting hidden and physics.
+- Fixed edit node mode's fallback.
+
+### Graph2d & Timeline
+
+- Fixed #858, #872, fixed usage of deprecated `unsubscribe` from DataSet.
+- Fixed #869: Add className with id to custom time bars
+- Fixed #877: Added support for metaKey to select multiple items.
+
 
 ## 2015-05-22, version 4.0.0
 
